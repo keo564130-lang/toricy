@@ -17,7 +17,8 @@
 
 1. Откройте ваш сервис
 2. "Settings" → "Root Directory" → `server`
-3. "Variables" → "Add Variable" → добавьте:
+3. **ВАЖНО!** "Settings" → "Build" → "Custom Install Command" → `npm install` (вместо npm ci)
+4. "Variables" → "Add Variable" → добавьте:
 
 ```
 JWT_SECRET=toricy-super-secret-key-2024
