@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
@@ -59,13 +59,13 @@ model UserSettings {
   theme         String   @default("light")
   language      String   @default("ru")
   notifications Boolean  @default(true)
-  customTheme   Json?
+  customTheme   String?
 }
 
 model Post {
   id          String     @id @default(uuid())
   content     String
-  media       Json?
+  media       String?
   authorId    String
   author      User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
   createdAt   DateTime   @default(now())
@@ -135,7 +135,7 @@ model Message {
   id          String   @id @default(uuid())
   content     String?
   type        String   @default("text")
-  media       Json?
+  media       String?
   chatId      String
   chat        Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
   senderId    String
