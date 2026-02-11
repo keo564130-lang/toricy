@@ -11,5 +11,6 @@
       "src": "/(.*)",
       "dest": "src/index.ts"
     }
-  ]
+  ],
+  "buildCommand": "cd server && npm install && npx prisma generate && cd .."
 }
