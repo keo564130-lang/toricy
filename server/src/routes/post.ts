@@ -25,6 +25,10 @@ router.get('/feed', authMiddleware, async (req, res) => {
 
 router.post('/', authMiddleware, async (req, res) => {
   try {
+    if (!req.userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    
     const post = await prisma.post.create({
       data: {
         content: req.body.content,
@@ -41,9 +45,15 @@ router.post('/', authMiddleware, async (req, res) => {
 
 router.post('/:id/like', authMiddleware, async (req, res) => {
   try {
+    if (!req.userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    
+    const postId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    
     const like = await prisma.like.create({
       data: {
-        postId: req.params.id,
+        postId,
         userId: req.userId
       }
     });
@@ -55,10 +65,16 @@ router.post('/:id/like', authMiddleware, async (req, res) => {
 
 router.post('/:id/comment', authMiddleware, async (req, res) => {
   try {
+    if (!req.userId) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    
+    const postId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    
     const comment = await prisma.comment.create({
       data: {
         content: req.body.content,
-        postId: req.params.id,
+        postId,
         authorId: req.userId
       },
       include: { author: true }
