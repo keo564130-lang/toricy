@@ -2,15 +2,11 @@
 
 ## ✅ ЧТО ДЕЛАТЬ ПРЯМО СЕЙЧАС
 
-### 1. Исправьте ошибку npm ci на Railway
+### 1. Railway автоматически подтянет новый код
 
-В Railway:
-1. Откройте ваш сервис
-2. **Settings** → **Build** → **Custom Install Command**
-3. Введите: `npm install`
-4. Сохраните
+Я добавил файл `server/nixpacks.toml` который говорит Railway использовать `npm install` вместо `npm ci`.
 
-Это исправит ошибку с package-lock.json!
+Railway автоматически пересоберёт проект после push в GitHub!
 
 ### 2. Добавьте Environment Variables
 
