@@ -1,0 +1,88 @@
+.feed {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.create-post {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.post-input {
+  resize: none;
+  min-height: 80px;
+}
+
+.posts {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.post {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.post-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.author-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.post-time {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.post-content {
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.post-actions {
+  display: flex;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.action-btn {
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.action-btn:hover {
+  background: var(--bg-tertiary);
+  transform: scale(1.05);
+}

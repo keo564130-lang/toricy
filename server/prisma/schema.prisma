@@ -1,0 +1,218 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String?   @unique
+  phone         String?   @unique
+  googleId      String?   @unique
+  username      String    @unique
+  displayName   String
+  avatar        String?
+  bio           String?
+  status        String?
+  password      String?
+  verified      Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  posts         Post[]
+  comments      Comment[]
+  likes         Like[]
+  favorites     Favorite[]
+  chats         ChatMember[]
+  messages      Message[]
+  contacts      Contact[]  @relation("UserContacts")
+  contactOf     Contact[]  @relation("ContactUser")
+  channels      Channel[]
+  groups        GroupMember[]
+  settings      UserSettings?
+  folders       Folder[]
+  bots          Bot[]
+  verificationCodes VerificationCode[]
+}
+
+model VerificationCode {
+  id        String   @id @default(uuid())
+  code      String
+  email     String
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  @@index([email])
+  @@index([code])
+}
+
+model UserSettings {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  theme         String   @default("light")
+  language      String   @default("ru")
+  notifications Boolean  @default(true)
+  customTheme   Json?
+}
+
+model Post {
+  id          String     @id @default(uuid())
+  content     String
+  media       Json?
+  authorId    String
+  author      User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  comments    Comment[]
+  likes       Like[]
+  favorites   Favorite[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  
+  @@unique([postId, userId])
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  
+  @@unique([postId, userId])
+}
+
+model Chat {
+  id          String       @id @default(uuid())
+  name        String?
+  isGroup     Boolean      @default(false)
+  avatar      String?
+  createdAt   DateTime     @default(now())
+  
+  members     ChatMember[]
+  messages    Message[]
+}
+
+model ChatMember {
+  id        String   @id @default(uuid())
+  chatId    String
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String   @default("member")
+  joinedAt  DateTime @default(now())
+  
+  @@unique([chatId, userId])
+}
+
+model Message {
+  id          String   @id @default(uuid())
+  content     String?
+  type        String   @default("text")
+  media       Json?
+  chatId      String
+  chat        Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  senderId    String
+  sender      User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  read        Boolean  @default(false)
+}
+
+model Contact {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation("UserContacts", fields: [userId], references: [id], onDelete: Cascade)
+  contactId   String
+  contact     User     @relation("ContactUser", fields: [contactId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  
+  @@unique([userId, contactId])
+}
+
+model Channel {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  avatar      String?
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+}
+
+model Group {
+  id          String        @id @default(uuid())
+  name        String
+  description String?
+  avatar      String?
+  createdAt   DateTime      @default(now())
+  
+  members     GroupMember[]
+}
+
+model GroupMember {
+  id        String   @id @default(uuid())
+  groupId   String
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String   @default("member")
+  joinedAt  DateTime @default(now())
+  
+  @@unique([groupId, userId])
+}
+
+model Folder {
+  id        String   @id @default(uuid())
+  name      String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Bot {
+  id          String   @id @default(uuid())
+  name        String
+  username    String   @unique
+  description String?
+  avatar      String?
+  token       String   @unique
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  pythonCode  String?
+  active      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model ServiceBot {
+  id        String   @id @default(uuid())
+  username  String   @unique @default("toricy_service")
+  name      String   @default("Toricy Service")
+  avatar    String?
+  createdAt DateTime @default(now())
+}

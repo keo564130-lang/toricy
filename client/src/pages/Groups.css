@@ -1,0 +1,39 @@
+.groups-page {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.groups-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.group-card {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.group-info h3 {
+  font-size: 18px;
+  margin: 0 0 4px 0;
+}
+
+.member-count {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.group-description {
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}

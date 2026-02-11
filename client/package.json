@@ -1,0 +1,29 @@
+{
+  "name": "toricy-client",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.22.0",
+    "axios": "^1.6.7",
+    "socket.io-client": "^4.6.1",
+    "framer-motion": "^11.0.5",
+    "@tanstack/react-query": "^5.22.2",
+    "zustand": "^4.5.0",
+    "recordrtc": "^5.6.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.4"
+  }
+}

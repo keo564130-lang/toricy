@@ -1,0 +1,260 @@
+.settings-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.settings-header {
+  margin-bottom: 32px;
+}
+
+.settings-header h1 {
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.settings-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  background: var(--bg-secondary);
+  padding: 6px;
+  border-radius: var(--radius);
+  overflow-x: auto;
+}
+
+.settings-tab {
+  flex: 1;
+  min-width: 140px;
+  padding: 14px 20px;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.settings-tab:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.settings-tab.active {
+  background: var(--bg-primary);
+  color: var(--accent);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.tab-icon {
+  font-size: 20px;
+}
+
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.settings-section h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.profile-avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+.avatar-large {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 36px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.form-group small {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-info {
+  flex: 1;
+}
+
+.setting-label {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.setting-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.theme-toggle-btn {
+  padding: 10px 20px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.theme-toggle-btn:hover {
+  background: var(--bg-tertiary);
+}
+
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 30px;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-tertiary);
+  transition: 0.3s;
+  border-radius: 30px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+  background: white;
+  transition: 0.3s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px var(--shadow);
+}
+
+.toggle input:checked + .toggle-slider {
+  background: var(--accent);
+}
+
+.toggle input:checked + .toggle-slider:before {
+  transform: translateX(22px);
+}
+
+.color-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+
+.color-option {
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  border: 3px solid transparent;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+}
+
+.color-option.active {
+  border-color: var(--text-primary);
+  box-shadow: 0 0 0 2px var(--bg-primary);
+}
+
+.font-size-options {
+  display: flex;
+  gap: 12px;
+}
+
+.font-size-btn {
+  flex: 1;
+  padding: 12px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.font-size-btn:hover {
+  background: var(--bg-tertiary);
+}
+
+.font-size-btn.active {
+  background: var(--accent);
+  color: white;
+}
+
+.danger-zone {
+  border: 2px solid var(--error);
+  background: var(--bg-secondary);
+}
+
+.btn-danger {
+  background: var(--error);
+  color: white;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+}
+
+.btn-danger:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
