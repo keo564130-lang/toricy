@@ -9,61 +9,63 @@ import { sendVerificationEmail, generateVerificationCode } from '../utils/email.
 const router = Router();
 const prisma = new PrismaClient();
 
-// Google OAuth Strategy
-passport.use(new GoogleStrategy({
-  clientID: process.env.GOOGLE_CLIENT_ID!,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-  callbackURL: process.env.GOOGLE_CALLBACK_URL!
-}, async (_accessToken, _refreshToken, profile, done) => {
-  try {
-    let user = await prisma.user.findUnique({
-      where: { googleId: profile.id }
-    });
-
-    if (!user) {
-      const existingUser = await prisma.user.findUnique({
-        where: { email: profile.emails?.[0].value }
+// Google OAuth Strategy (опционально)
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET && process.env.GOOGLE_CALLBACK_URL) {
+  passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.GOOGLE_CALLBACK_URL
+  }, async (_accessToken, _refreshToken, profile, done) => {
+    try {
+      let user = await prisma.user.findUnique({
+        where: { googleId: profile.id }
       });
 
-      if (existingUser) {
-        user = await prisma.user.update({
-          where: { id: existingUser.id },
-          data: {
-            googleId: profile.id,
-            avatar: profile.photos?.[0].value,
-            verified: true
-          }
+      if (!user) {
+        const existingUser = await prisma.user.findUnique({
+          where: { email: profile.emails?.[0].value }
         });
-      } else {
-        const baseUsername = profile.emails?.[0].value.split('@')[0] || 'user';
-        let username = baseUsername;
-        let counter = 1;
-        
-        while (await prisma.user.findUnique({ where: { username } })) {
-          username = `${baseUsername}${counter}`;
-          counter++;
+
+        if (existingUser) {
+          user = await prisma.user.update({
+            where: { id: existingUser.id },
+            data: {
+              googleId: profile.id,
+              avatar: profile.photos?.[0].value,
+              verified: true
+            }
+          });
+        } else {
+          const baseUsername = profile.emails?.[0].value.split('@')[0] || 'user';
+          let username = baseUsername;
+          let counter = 1;
+          
+          while (await prisma.user.findUnique({ where: { username } })) {
+            username = `${baseUsername}${counter}`;
+            counter++;
+          }
+
+          user = await prisma.user.create({
+            data: {
+              googleId: profile.id,
+              email: profile.emails?.[0].value,
+              username,
+              displayName: profile.displayName,
+              avatar: profile.photos?.[0].value,
+              verified: true,
+              settings: { create: {} }
+            }
+          });
         }
-
-        user = await prisma.user.create({
-          data: {
-            googleId: profile.id,
-            email: profile.emails?.[0].value,
-            username,
-            displayName: profile.displayName,
-            avatar: profile.photos?.[0].value,
-            verified: true,
-            settings: { create: {} }
-          }
-        });
       }
-    }
 
-    done(null, user);
-  } catch (error) {
-    console.error('Google OAuth error:', error);
-    done(error as Error, undefined);
-  }
-}));
+      done(null, user);
+    } catch (error) {
+      console.error('Google OAuth error:', error);
+      done(error as Error, undefined);
+    }
+  }));
+}
 
 // Шаг 1: Отправка кода на email
 router.post('/send-code', async (req, res) => {
