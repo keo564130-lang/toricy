@@ -1,3 +1,4 @@
+import { API_URL, WS_URL } from '../config'
 import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -39,7 +40,7 @@ export default function Chats() {
   const { data: chats = [] } = useQuery<Chat[]>({
     queryKey: ['chats'],
     queryFn: async () => {
-      const res = await axios.get('http://localhost:3000/api/chats', {
+      const res = await axios.get('${API_URL}/api/chats', {
         headers: { Authorization: `Bearer ${token}` }
       })
       return res.data
@@ -47,7 +48,7 @@ export default function Chats() {
   })
 
   useEffect(() => {
-    const newSocket = io('http://localhost:3000', {
+    const newSocket = io('${API_URL}', {
       auth: { token }
     })
     

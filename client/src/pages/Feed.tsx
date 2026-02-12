@@ -1,3 +1,4 @@
+import { API_URL, WS_URL } from '../config'
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -23,7 +24,7 @@ export default function Feed() {
   const { data: posts = [] } = useQuery<Post[]>({
     queryKey: ['posts'],
     queryFn: async () => {
-      const res = await axios.get('http://localhost:3000/api/posts/feed', {
+      const res = await axios.get('${API_URL}/api/posts/feed', {
         headers: { Authorization: `Bearer ${token}` }
       })
       return res.data
@@ -32,7 +33,7 @@ export default function Feed() {
 
   const createPost = useMutation({
     mutationFn: async (content: string) => {
-      const res = await axios.post('http://localhost:3000/api/posts', 
+      const res = await axios.post(`${API_URL}/api/posts`, 
         { content },
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -46,7 +47,7 @@ export default function Feed() {
 
   const likePost = useMutation({
     mutationFn: async (postId: string) => {
-      await axios.post(`http://localhost:3000/api/posts/${postId}/like`, {}, {
+      await axios.post(`${API_URL}/api/posts/${postId}/like`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       })
     },

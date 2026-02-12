@@ -18,34 +18,39 @@ import groupRoutes from './routes/group.js';
 import channelRoutes from './routes/channel.js';
 import { setupSocketHandlers } from './socket/index.js';
 
+import { PrismaClient } from '@prisma/client';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 dotenv.config({ path: join(__dirname, '..', '.env') });
 
+const prisma = new PrismaClient();
+
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: [
-      'http://localhost:5173',
-      'https://toricy.netlify.app',
-      'https://*.netlify.app'
-    ],
+    origin: true,
     credentials: true
   }
 });
 
 app.use(cors({ 
-  origin: [
-    'http://localhost:5173',
-    'https://toricy.netlify.app',
-    'https://*.netlify.app'
-  ], 
+  origin: true,
   credentials: true 
 }));
 app.use(express.json());
 app.use(passport.initialize());
+
+// Health check
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', message: 'Toricy API is running' });
+});
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
@@ -61,6 +66,19 @@ app.use('/api/channels', channelRoutes);
 setupSocketHandlers(io);
 
 const PORT = process.env.PORT || 3000;
+
+// Initialize database
+async function initDatabase() {
+  try {
+    await prisma.$connect();
+    console.log('✅ Database connected');
+  } catch (error) {
+    console.error('❌ Database connection failed:', error);
+  }
+}
+
+initDatabase();
+
 httpServer.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });

@@ -1,3 +1,4 @@
+import { API_URL, WS_URL } from '../config'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useAuthStore } from '../store/auth'
@@ -34,7 +35,7 @@ export default function Settings() {
 
   const updateProfile = useMutation({
     mutationFn: async (data: typeof profileData) => {
-      const res = await axios.patch('http://localhost:3000/api/users/me', data, {
+      const res = await axios.patch('${API_URL}/api/users/me', data, {
         headers: { Authorization: `Bearer ${token}` }
       })
       return res.data

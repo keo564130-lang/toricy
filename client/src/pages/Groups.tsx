@@ -1,3 +1,4 @@
+import { API_URL, WS_URL } from '../config'
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
@@ -26,7 +27,7 @@ export default function Groups() {
   const { data: groups = [] } = useQuery<Group[]>({
     queryKey: ['groups'],
     queryFn: async () => {
-      const res = await axios.get('http://localhost:3000/api/groups', {
+      const res = await axios.get('${API_URL}/api/groups', {
         headers: { Authorization: `Bearer ${token}` }
       })
       return res.data
@@ -35,7 +36,7 @@ export default function Groups() {
 
   const createGroup = useMutation({
     mutationFn: async (data: typeof formData) => {
-      const res = await axios.post('http://localhost:3000/api/groups', data, {
+      const res = await axios.post('${API_URL}/api/groups', data, {
         headers: { Authorization: `Bearer ${token}` }
       })
       return res.data

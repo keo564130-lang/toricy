@@ -1,3 +1,4 @@
+import { API_URL, WS_URL } from '../config'
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useAuthStore } from '../store/auth'
@@ -55,7 +56,7 @@ export default function Auth() {
     setError('')
     
     try {
-      await axios.post('http://localhost:3000/api/auth/send-code', {
+      await axios.post('${API_URL}/api/auth/send-code', {
         email: formData.email
       })
       setStep('code')
@@ -73,7 +74,7 @@ export default function Auth() {
     setError('')
     
     try {
-      const res = await axios.post('http://localhost:3000/api/auth/register/email', {
+      const res = await axios.post('${API_URL}/api/auth/register/email', {
         email: formData.email,
         code: formData.code,
         password: formData.password,
@@ -94,7 +95,7 @@ export default function Auth() {
     setError('')
     
     try {
-      const res = await axios.post('http://localhost:3000/api/auth/login', {
+      const res = await axios.post('${API_URL}/api/auth/login', {
         identifier: formData.email,
         password: formData.password
       })
@@ -172,7 +173,7 @@ export default function Auth() {
             <button 
               type="button"
               className="btn btn-secondary google-btn"
-              onClick={() => window.location.href = 'http://localhost:3000/api/auth/google'}
+              onClick={() => window.location.href = '${API_URL}/api/auth/google'}
             >
               🔐 Войти через Google
             </button>
@@ -197,7 +198,7 @@ export default function Auth() {
                 <button 
                   type="button"
                   className="btn btn-secondary google-btn"
-                  onClick={() => window.location.href = 'http://localhost:3000/api/auth/google'}
+                  onClick={() => window.location.href = '${API_URL}/api/auth/google'}
                 >
                   🔐 Войти через Google
                 </button>

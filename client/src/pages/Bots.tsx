@@ -1,3 +1,4 @@
+import { API_URL, WS_URL } from '../config'
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -30,7 +31,7 @@ export default function Bots() {
   const { data: bots = [] } = useQuery<Bot[]>({
     queryKey: ['bots'],
     queryFn: async () => {
-      const res = await axios.get('http://localhost:3000/api/bots', {
+      const res = await axios.get('${API_URL}/api/bots', {
         headers: { Authorization: `Bearer ${token}` }
       })
       return res.data
@@ -39,7 +40,7 @@ export default function Bots() {
 
   const createBot = useMutation({
     mutationFn: async (data: typeof formData) => {
-      const res = await axios.post('http://localhost:3000/api/bots', data, {
+      const res = await axios.post('${API_URL}/api/bots', data, {
         headers: { Authorization: `Bearer ${token}` }
       })
       return res.data
@@ -54,7 +55,7 @@ export default function Bots() {
   const toggleBot = useMutation({
     mutationFn: async ({ id, active }: { id: string; active: boolean }) => {
       const endpoint = active ? 'stop' : 'start'
-      await axios.post(`http://localhost:3000/api/bots/${id}/${endpoint}`, {}, {
+      await axios.post(`${API_URL}/api/bots/${id}/${endpoint}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       })
     },
@@ -65,7 +66,7 @@ export default function Bots() {
 
   const deleteBot = useMutation({
     mutationFn: async (id: string) => {
-      await axios.delete(`http://localhost:3000/api/bots/${id}`, {
+      await axios.delete(`${API_URL}/api/bots/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
     },
